@@ -70,14 +70,24 @@ exports.getRequest = async (req, res, next) => {
 };
 
 exports.getFriends = async (req, res, next) => {
-  const this_user = await User.findById(req.query.uid).populate(
-    "friends",
-    "_id firstName lastName"
-  );
 
-  res.status(200).json({
-    status: "success",
-    data: this_user.friends,
-    message: "Friends found successfully",
-  });
+  try {
+    const this_user = await User.findById(req.query.uid)
+    .populate(
+      "friends",
+      "_id firstName lastName"
+    );
+    res.status(200).json({
+      status: "success",
+      data: this_user.friends,
+      // data: this_user,
+      message: "Friends found successfully",
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: error,
+    });
+  }
+
 };
