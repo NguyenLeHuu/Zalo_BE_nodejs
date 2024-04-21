@@ -4,11 +4,15 @@ const GroupChat = require("../models/GroupChat");
 module.exports = {
   async getOne(req, res) {
     try {
-      const group = await GroupChat.findById(req.params.groupId).populate(
-        "members",
-        "lastName"
-      );
-      // .populate({ path: "messages.senderName", select: "lastName" });
+      const group = await GroupChat.findById(req.params.groupId)
+      // .populate(
+      //   "members",
+      //   "lastName"
+      // );
+      .populate({
+        path: "members",
+        select: "firstName lastName"
+      });
 
       if (!group) {
         res.status(500).json({ message: "Nhóm không còn tồn tại" });
