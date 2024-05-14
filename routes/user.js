@@ -7,7 +7,7 @@ router.get(
   // authController.protect,
   userController.getProfile
 );
-router.patch(
+router.put(
   "/update-me",
   //  authController.protect,
   userController.updateMe

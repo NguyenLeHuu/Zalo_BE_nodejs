@@ -19,14 +19,17 @@ exports.getProfile = async (req, res, next) => {
   }
 };
 exports.updateMe = async (req, res, next) => {
+  console.log("update-me",req.body._id)
   const filteredBody = filterObj(
     req.body,
     "firstName",
     "lastName",
-    "about",
-    "avatar"
+    "dateOfBirth",
+    "gender",
+    'phone',
+    'email'
   );
-  const userDoc = await User.findByIdAndUpdate(req.user._id, filteredBody);
+  const userDoc = await User.findByIdAndUpdate(req.body._id, filteredBody);
 
   res.status(200).json({
     status: "success",
