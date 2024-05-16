@@ -96,7 +96,8 @@ io.on("connection", async (socket) => {
   });
 
   //tao room
-  socket.on("create-group-chat", (data) => {
+  socket.on("join-group-chat", (data) => {
+    console.log("group id nè:", data.groupId)
     socket.join(data.groupId);
   });
 
@@ -114,10 +115,19 @@ io.on("connection", async (socket) => {
 
   //group chat
   socket.on("client-sent-message-group", (data) => {
-    io.sockets.in(data.groupId).emit("server-sent-message-group");
+    const room = io.sockets.adapter.rooms.get(data.groupId);
+    if (room) {
+        console.log("loggedInUsers --------", loggedInUsers)
+        console.log(`Sockets in room ${data.groupId}:`, Array.from(room));
+    } else {
+        console.log(`No sockets in room ${data.groupId}`);
+    }
+    io.sockets.in(data.groupId).emit("server-sent-message-group", data);
     // io.to(value.socket_id).emit("server-send-data", data); //gửi tới 1 thằng
-    //io.sockets.emit("server-send-data", data); tắt cả socket
+    // io.sockets.emit("server-sent-message-group", data); //tắt cả socket
     //socket.broadcast.emit("server-send-data", data); tắt cả trừ th gửi
+    
+    console.log("gửi mess thành công:", data.groupId)
   });
 
   socket.on("friend_request", async (data) => {
